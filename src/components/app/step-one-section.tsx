@@ -60,6 +60,7 @@ export default function StepOneSection() {
             ステップ２では、実際にプロンプトを作成してみましょう！
           </p>
         </div>
+        <hr/>
       </div>
     </section>
   );
