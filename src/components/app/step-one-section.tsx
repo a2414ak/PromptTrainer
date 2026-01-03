@@ -47,7 +47,7 @@ export default function StepOneSection() {
           description="次のプロンプトを、構造化されたプロンプトに修正してください。"
           prompt="「報告メール作成。今日の進捗と課題を伝えたい。例文がほしい。文体はビジネスカジュアル。」"
           inputType="textarea"
-          placeholder="構造化プロンプトを入力..."
+          placeholder="ここに回答を入力..."
           trainingContent="次の非構造化プロンプトを、役割・タスク・条件などを含む構造化されたプロンプトに修正してください：『報告メール作成。今日の進捗と課題を伝えたい。例文がほしい。文体はビジネスカジュアル。』"
           testName="ミニテストB：プロンプト構造化"
         />
