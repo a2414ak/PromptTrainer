@@ -120,7 +120,7 @@ export default function FloatingChat({ isOpen, onOpenChange }: FloatingChatProps
       
       {!isOpen && (
         <p className="text-right text-sm font-black text-slate-700 dark:text-slate-400 animate-in fade-in slide-in-from-right-2 duration-500 bg-background/60 px-4 py-2 rounded-xl backdrop-blur-sm shadow-sm border border-primary/20">
-            気になることを何でも質問してください！AIメンターが優しく回答しますよ。
+            気になることは何でも質問してください！
           </p>
       )}
 

@@ -15,7 +15,12 @@ export default function StepOneSection() {
         <div className="ml-16 text-base text-slate-900 dark:text-slate-200 leading-relaxed bg-white/50 dark:bg-card p-6 rounded-2xl border-2 border-slate-200 dark:border-border shadow-sm">
           <div className="font-bold text-slate-900 dark:text-white">
             <p className="text-primary text-lg">★良いプロンプトの条件</p>
-            <p className="mt-2 text-lg">①命令・指示が明確　②文脈や背景情報が整理されている　③出力形式が指定されている　④構造化されている</p>
+            <div className="mt-3 space-y-2 text-lg">
+              <p>① 命令・指示が明確</p>
+              <p>② 文脈や背景情報が整理されている</p>
+              <p>③ 出力形式が指定されている</p>
+              <p>④ 構造化されている</p>
+            </div>
           </div>
         </div>
       </div>
@@ -27,7 +32,7 @@ export default function StepOneSection() {
           id="A"
           title="ミニテストA：研修理解"
           icon={FileText}
-          description="〇〇に入る漢字文字は何か。研修スライドに基づいて回答してください。"
+          description="〇〇に入る漢字２文字は何か。研修スライドに基づいて回答してください。"
           prompt="良いプロンプトは、命令・〇〇が明確である。"
           inputType="input"
           placeholder="ここに解答を入力..."
@@ -49,7 +54,9 @@ export default function StepOneSection() {
         
         <div className="mt-6 p-6 text-center">
           <p className="text-xl font-black text-slate-800 dark:text-slate-200 leading-relaxed">
-            良いプロンプトの条件を思い出せましたか？ステップ２では、実際にプロンプトを作成してみましょう！
+            良いプロンプトの条件を思い出せましたか？
+            <br />
+            ステップ２では、実際にプロンプトを作成してみましょう！
           </p>
         </div>
       </div>
