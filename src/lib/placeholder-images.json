@@ -1,3 +1,22 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "example-1",
+      "description": "A meeting room with a whiteboard",
+      "imageUrl": "https://images.unsplash.com/photo-1529119368496-2dfda6ec2804?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxtZWV0aW5nJTIwYWdlbmRhfGVufDB8fHx8MTc2NzQwOTA3NXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "meeting agenda"
+    },
+    {
+      "id": "example-2",
+      "description": "A person typing on a laptop",
+      "imageUrl": "https://images.unsplash.com/photo-1762330466678-45b42e02f5a0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxyZWNydWl0bWVudCUyMGVtYWlsfGVufDB8fHx8MTc2NzQwOTA3NXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "recruitment email"
+    },
+    {
+      "id": "example-3",
+      "description": "A rocket launching, symbolizing a new release",
+      "imageUrl": "https://images.unsplash.com/photo-1631237535235-3bbc47f7d446?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxwcm9kdWN0JTIwbGF1bmNofGVufDB8fHx8MTc2NzM4MjUxN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "product launch"
+    }
+  ]
 }
