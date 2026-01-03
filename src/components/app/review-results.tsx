@@ -7,15 +7,58 @@ import { Button } from "@/components/ui/button";
 import { Bot, FileEdit, MessageSquareQuote } from "lucide-react";
 import type { ReviewResult } from "@/lib/types";
 
+const CRITERIA_ORDER = [
+  '指示の明確さ',
+  '背景情報が整理されているか',
+  '出力形式の指定',
+  '構造化されているか',
+] as const;
+
+type Criteria = typeof CRITERIA_ORDER[number];
+type Status = '非常に良い' | '良好' | '改善点';
+
+type Evaluation = {
+  criteria: Criteria;
+  status: Status;
+  advice: string;
+};
+
 interface ReviewResultsProps {
   reviewResult: ReviewResult;
   onRetry: () => void;
 }
 
-export default function ReviewResults({ reviewResult, onRetry }: ReviewResultsProps) {
-  const hasImprovementNeeded = reviewResult.evaluations.some(ev => ev.status === '改善点');
+function normalizeEvaluations(evaluations: any[]): Evaluation[] {
+  const map = new Map<Criteria, { status: Status; advice: string }>();
 
-  const getStatusBadge = (status: '非常に良い' | '良好' | '改善点') => {
+  for (const ev of Array.isArray(evaluations) ? evaluations : []) {
+    // criteria が固定4つのどれかだけ拾う（それ以外は無視）
+    if (CRITERIA_ORDER.includes(ev?.criteria)) {
+      map.set(ev.criteria, {
+        status: (ev?.status ?? '改善点') as Status,
+        advice: String(ev?.advice ?? ''),
+      });
+    }
+  }
+
+  // 4つ必ず返す（不足は補完）
+  return CRITERIA_ORDER.map((c) => {
+    const v = map.get(c);
+    if (v) return { criteria: c, ...v };
+    return {
+      criteria: c,
+      status: '改善点',
+      advice: '評価結果が不足していました。プロンプトをより具体的にしてください。',
+    };
+  });
+}
+
+export default function ReviewResults({ reviewResult, onRetry }: ReviewResultsProps) {
+  const normalizedEvaluations = normalizeEvaluations(reviewResult.evaluations);
+
+  const hasImprovementNeeded = normalizedEvaluations.some(ev => ev.status === '改善点');
+
+  const getStatusBadge = (status: Status) => {
     switch (status) {
       case '非常に良い':
         return <Badge className="bg-green-100 text-green-900 border-green-300 hover:bg-green-100 text-sm">◎ 非常に良い</Badge>;
@@ -50,6 +93,7 @@ export default function ReviewResults({ reviewResult, onRetry }: ReviewResultsPr
                 評価とフィードバック
               </CardTitle>
             </CardHeader>
+
             <div className="overflow-x-auto">
               <Table className="w-full text-base text-left">
                 <TableHeader className="text-sm font-black uppercase tracking-widest text-muted-foreground bg-slate-200 dark:bg-white/10">
@@ -59,19 +103,26 @@ export default function ReviewResults({ reviewResult, onRetry }: ReviewResultsPr
                     <TableHead className="px-8 py-5 w-[40%]">アドバイス</TableHead>
                   </TableRow>
                 </TableHeader>
+
                 <TableBody className="divide-y-2 divide-border">
-                  {reviewResult.evaluations.map((ev, i) => (
+                  {normalizedEvaluations.map((ev, i) => (
                     <TableRow key={i} className="group hover:bg-muted/50 transition-colors">
-                      <TableCell className="px-8 py-6 font-black text-foreground align-top leading-relaxed">{ev.criteria}</TableCell>
+                      <TableCell className="px-8 py-6 font-black text-foreground align-top leading-relaxed">
+                        {ev.criteria}
+                      </TableCell>
                       <TableCell className="px-8 py-6 align-top">
                         {getStatusBadge(ev.status)}
                       </TableCell>
-                      <TableCell className="px-8 py-6 text-slate-900 dark:text-slate-200 text-base leading-loose align-top">{ev.advice}</TableCell>
+                      <TableCell className="px-8 py-6 text-slate-900 dark:text-slate-200 text-base leading-loose align-top">
+                        {ev.advice}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
+
               </Table>
             </div>
+
             <div className="p-4 bg-muted border-t-2 border-border text-center">
               <Button
                 variant="link"

@@ -3,8 +3,22 @@
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 
+const CriteriaEnum = z.enum([
+  '指示の明確さ',
+  '背景情報が整理されているか',
+  '出力形式の指定',
+  '構造化されているか',
+]);
+
+const REQUIRED_CRITERIA = [
+  '指示の明確さ',
+  '背景情報が整理されているか',
+  '出力形式の指定',
+  '構造化されているか',
+] as const;
+
 const EvaluationSchema = z.object({
-  criteria: z.string().describe('評価基準（例：明確さ、コンテキスト）。'),
+  criteria: CriteriaEnum.describe('評価基準（固定：4つのみ）'),
   status: z
     .enum(['非常に良い', '良好', '改善点'])
     .describe('評価ステータス：非常に良い、良好、または改善点。'),
@@ -13,7 +27,11 @@ const EvaluationSchema = z.object({
 
 const ReviewResultSchema = z.object({
   aiOutput: z.string().describe('ユーザープロンプトに基づいてAIが生成した出力。'),
-  evaluations: z.array(EvaluationSchema).describe('プロンプトの評価の配列。'),
+  evaluations: z
+    .array(EvaluationSchema)
+    .min(4)
+    .max(4)
+    .describe('プロンプトの評価（4件固定）。'),
 });
 
 export type ReviewResult = z.infer<typeof ReviewResultSchema>;
@@ -28,7 +46,6 @@ export type GenerateAndReviewInput = z.infer<typeof GenerateAndReviewInputSchema
 const generateAiOutputPrompt = ai.definePrompt({
   name: 'generateAiOutputPrompt',
   input: { schema: GenerateAndReviewInputSchema },
-  // ✅ ここが原因なので output を削除（JSON5 parseさせない）
   prompt: `
 あなたは業務アシスタントです。
 シナリオ: {{{scenario}}}
@@ -44,21 +61,53 @@ const generateAiOutputPrompt = ai.definePrompt({
 const evaluatePrompt = ai.definePrompt({
   name: 'evaluatePrompt',
   input: { schema: z.object({ prompt: z.string() }) },
-  output: { schema: z.object({ evaluations: z.array(EvaluationSchema) }) },
-  // ✅ JSONのみ返す縛りを追加（構造化出力の事故対策）
+  output: { schema: z.object({ evaluations: z.array(EvaluationSchema).min(4).max(4) }) },
   prompt: `
 あなたはプロンプトレビュー担当です。
 次のスキーマに一致する「JSONのみ」を返してください。
 - 説明文、前置き、コードフェンス(\`\`\`)は禁止です。
 - advice に改行を入れないでください（必要なら \\n を使ってください）。
+- evaluations は必ず4件、次のcriteriaを「この順番で」1回ずつ必ず使ってください（増減禁止）:
+  1. 指示の明確さ
+  2. 背景情報が整理されているか
+  3. 出力形式の指定
+  4. 構造化されているか
 
 スキーマ:
-{ "evaluations": [ { "criteria": string, "status": "非常に良い" | "良好" | "改善点", "advice": string } ] }
+{ "evaluations": [ { "criteria": "指示の明確さ" | "背景情報が整理されているか" | "出力形式の指定" | "構造化されているか", "status": "非常に良い" | "良好" | "改善点", "advice": string } ] }
 
 対象プロンプト:
 {{{prompt}}}
 `.trim(),
 });
+
+function normalizeEvaluations(
+  raw: any[]
+): z.infer<typeof EvaluationSchema>[] {
+  const map = new Map<string, any>();
+
+  for (const item of Array.isArray(raw) ? raw : []) {
+    const c = item?.criteria;
+    if (REQUIRED_CRITERIA.includes(c)) {
+      map.set(c, {
+        criteria: c,
+        status: item?.status ?? '改善点',
+        advice: String(item?.advice ?? '').replace(/\n/g, '\\n'),
+      });
+    }
+  }
+
+  return REQUIRED_CRITERIA.map((c) => {
+    const v = map.get(c);
+    if (v) return v;
+
+    return {
+      criteria: c,
+      status: '改善点',
+      advice: '評価結果が不足していました。指示をより具体化してください。',
+    };
+  });
+}
 
 export async function generateAndReview(
   scenario: string,
@@ -76,34 +125,26 @@ const generateAndReviewFlow = ai.defineFlow(
   async (input) => {
     const aiOutput = await generateAiOutputPrompt(input).then((res) => res.text);
 
-
     let evaluations: z.infer<typeof EvaluationSchema>[] = [];
     try {
       const evaluationResponse = await evaluatePrompt({ prompt: input.prompt });
 
-      // ✅ output() / output の両対応（環境差分吸収）
       const output =
         typeof (evaluationResponse as any).output === 'function'
           ? (evaluationResponse as any).output()
           : (evaluationResponse as any).output;
 
       if (output?.evaluations) {
-        evaluations = output.evaluations;
+        evaluations = normalizeEvaluations(output.evaluations);
       } else {
-        // 念のため：パースできてない時のログ
-        console.error('[evaluatePrompt] output is empty. raw text:', (evaluationResponse as any).text);
-
+        console.error(
+          '[evaluatePrompt] output is empty. raw text:',
+          (evaluationResponse as any).text
+        );
       }
     } catch (error) {
       console.error('Error parsing evaluations:', error);
-      evaluations = [
-        {
-          criteria: '評価不可',
-          status: '改善点',
-          advice:
-            'AIの応答を解析できませんでした。プロンプトをより明確に、より具体的にしてみてください。',
-        },
-      ];
+      evaluations = normalizeEvaluations([]);
     }
 
     return { aiOutput, evaluations };
