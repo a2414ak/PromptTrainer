@@ -1,7 +1,6 @@
 import { Separator } from "@/components/ui/separator"
 import MiniTestCard from "./mini-test-card"
 import { FileText, SlidersHorizontal } from "lucide-react"
-import { UpstashTestPanel } from "@/components/app/upstash-test-panel";//test
 
 export default function StepOneSection() {
   return (
@@ -28,7 +27,6 @@ export default function StepOneSection() {
       </div>
 
       <Separator />
-      <UpstashTestPanel />//test
 
       <div className="flex flex-col gap-8">
         <MiniTestCard
