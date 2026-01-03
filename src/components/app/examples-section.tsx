@@ -16,6 +16,24 @@ export default function ExamplesSection({ onExampleSelect }: ExamplesSectionProp
         <h3 className="font-black text-sm uppercase tracking-[0.2em] text-slate-700 dark:text-slate-400">似たシチュエーションの社内取り組み</h3>
         <p className="text-2xl font-black text-slate-800 dark:text-slate-200 font-headline">各シチュエーションで、有効なプロンプトを知りましょう</p>
       </div>
+      <div className="flex flex-wrap gap-3 pt-2">
+      {['業務効率化','ナレッジ','組織','営業','プロジェクト','人材育成','計画'].map((label) => (
+        <button
+          key={label}
+          data-active="false"
+          onClick={(e) => {
+            const el = e.currentTarget;
+            el.dataset.active = el.dataset.active === 'true' ? 'false' : 'true';
+          }}
+          className="rounded-full border border-slate-300 px-4 py-1.5 text-sm font-semibold text-slate-700 bg-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md hover:border-primary hover:text-primary data-[active=true]:bg-primary data-[active=true]:text-white data-[active=true]:border-primary"
+        >
+          {label}
+        </button>
+      ))}
+          <button type="button" className="basis-full mt-2 w-fit rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-sm transition-all hover:shadow-md hover:brightness-105 active:translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60">選択したテーマに基づき、再読み込みする</button>
+
+    </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {BUSINESS_EXAMPLES.map((ex) => (
           <Card
