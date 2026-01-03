@@ -94,7 +94,7 @@ export default function MiniTestCard({
               className="font-black px-10 rounded-2xl text-lg h-auto shadow-lg shadow-primary/20"
               size="lg"
             >
-              {isLoading ? <Loader2 className="animate-spin" /> : '送信'}
+              {isLoading ? <Loader2 className="animate-spin" /> : '回答する'}
             </Button>
           </div>
         ) : (
@@ -114,7 +114,7 @@ export default function MiniTestCard({
                 className="font-black px-12 py-4 rounded-2xl text-lg h-auto shadow-xl shadow-primary/20"
                 size="lg"
               >
-                {isLoading ? <Loader2 className="animate-spin" /> : '評価する'}
+                {isLoading ? <Loader2 className="animate-spin" /> : '回答する'}
               </Button>
             </div>
           </div>
