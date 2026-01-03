@@ -37,7 +37,7 @@ const chatAssistantPrompt = ai.definePrompt({
   name: 'chatAssistantPrompt',
   input: { schema: ChatInputSchema },
   output: { schema: ChatOutputSchema },
-  prompt: `あなたはプロンプトエンジニアリングに特化したAIチャTアシスタントです。
+  prompt: `あなたはプロンプトエンジニアリングに特化したAIアシスタントです。
   あなたの目標は、ユーザーがプロンプトエンジニアリングの概念とベストプラクティスを理解するのを助けることです。
   あなたはガイダンスを提供し、質問に答え、プロンプトを改善するための提案をすべきです。
   フレンドリーで親切なトーンを維持してください。
