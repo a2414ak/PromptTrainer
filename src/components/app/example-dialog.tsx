@@ -61,13 +61,21 @@ export default function ExampleDialog({ example, onClose, onTryPrompt }: Example
             </div>
 
             <DialogFooter className="mt-6 pt-8 border-t-2 border-border flex-col sm:flex-col md:flex-row gap-4">
-              <Button
-                onClick={() => onTryPrompt(example.recommendedPrompt)}
-                className="flex-1 rounded-2xl py-6 text-xl h-auto"
-                size="lg"
-              >
-                このプロンプトを試す
-              </Button>
+            <Button
+  disabled={!example.recommendedPrompt}
+  onClick={() => {
+    if (!example.recommendedPrompt) return;
+    onTryPrompt(example.recommendedPrompt);
+  }}
+  className="
+    flex-1 rounded-2xl py-6 text-xl h-auto
+    disabled:opacity-40 disabled:cursor-not-allowed disabled:saturate-0
+  "
+  size="lg"
+>
+  このプロンプトを試す
+</Button>
+
               <Button
                 variant="outline"
                 onClick={onClose}

@@ -20,7 +20,8 @@ export type BusinessExample = {
   description: string;
   image: string;
   imageHint: string;
-  recommendedPrompt: string;
+  recommendedPrompt?: string;
+  expectedEffect?: string;
 };
 
 export type Message = {
