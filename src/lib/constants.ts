@@ -53,7 +53,6 @@ export const BUSINESS_EXAMPLES: BusinessExample[] = [
 - 会議時間: 60分
 - 主要トピック: 1. 先週の進捗確認 (20分), 2. 今週の課題共有 (30分), 3. その他連絡事項 (10分)
 - 出力形式: マークダウン形式のリスト`,
-    expectedEffect: '会議準備の時間を50%削減',
   },
   {
     id: 'example-2',
@@ -73,7 +72,6 @@ export const BUSINESS_EXAMPLES: BusinessExample[] = [
 - 強調する点: 候補者のReactに関する豊富な経験
 - 文体: 丁寧かつフレンドリー
 - 出力形式: テキスト`,
-    expectedEffect: '候補者返信率が20%向上',
   },
   {
     id: 'example-3',
@@ -92,6 +90,5 @@ export const BUSINESS_EXAMPLES: BusinessExample[] = [
 - メリット: 問い合わせ対応工数の削減、顧客満足度の向上
 - 利用開始日: 2023年10月1日
 - 出力形式: Slack投稿用のフォーマット`,
-    expectedEffect: '新機能の利用率を30%向上',
   },
 ];

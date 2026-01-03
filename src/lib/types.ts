@@ -21,7 +21,6 @@ export type BusinessExample = {
   image: string;
   imageHint: string;
   recommendedPrompt: string;
-  expectedEffect: string;
 };
 
 export type Message = {

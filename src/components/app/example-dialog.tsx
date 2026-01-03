@@ -58,14 +58,6 @@ export default function ExampleDialog({ example, onClose, onTryPrompt }: Example
                   {example.recommendedPrompt}
                 </p>
               </div>
-
-              <div className="flex flex-col gap-3">
-                <h4 className="text-sm font-black uppercase tracking-widest text-slate-700 dark:text-slate-400">期待される効果</h4>
-                <div className="flex items-center gap-4 text-2xl font-black text-foreground">
-                  <TrendingUp className="text-primary" size={32} />
-                  {example.expectedEffect}
-                </div>
-              </div>
             </div>
 
             <DialogFooter className="mt-6 pt-8 border-t-2 border-border flex-col sm:flex-col md:flex-row gap-4">
