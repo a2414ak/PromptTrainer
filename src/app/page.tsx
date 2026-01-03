@@ -28,6 +28,8 @@ export default function Home() {
   // Floating Chat State
   const [isChatOpen, setIsChatOpen] = useState(false);
 
+  const isExampleOpen = !!selectedExample;
+
   // Handle ESC key for closing modals
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -39,6 +41,10 @@ export default function Home() {
     window.addEventListener('keydown', handleEsc);
     return () => window.removeEventListener('keydown', handleEsc);
   }, []);
+
+  useEffect(() => {
+    if (isExampleOpen) setIsChatOpen(false);
+  }, [isExampleOpen]);
 
   const onGenerateAndReview = async () => {
     if (!userPrompt.trim() || isReviewLoading) return;
@@ -107,7 +113,9 @@ export default function Home() {
         onTryPrompt={handleTryPrompt}
       />
 
-      <FloatingChat isOpen={isChatOpen} onOpenChange={setIsChatOpen} />
+{!isExampleOpen && (
+        <FloatingChat isOpen={isChatOpen} onOpenChange={setIsChatOpen} />
+      )}
 
       <Footer />
     </div>
