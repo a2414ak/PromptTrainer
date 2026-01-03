@@ -5,6 +5,8 @@ import { useMemo, useState } from 'react';
 import { BUSINESS_EXAMPLES } from '@/lib/constants';
 import type { BusinessExample } from '@/lib/types';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Loader2 } from "lucide-react";
+
 
 interface ExamplesSectionProps {
   onExampleSelect: (example: BusinessExample) => void;
@@ -134,41 +136,69 @@ export default function ExamplesSection({ onExampleSelect }: ExamplesSectionProp
           各シチュエーションで、有効なプロンプトを知りましょう
         </p>
       </div>
-
-      <div className="flex flex-wrap gap-3 pt-2">
-        {LABELS.map((label) => {
-          const isActive = activeLabels.includes(label);
-          return (
-            <button
-              key={label}
-              type="button"
-              data-active={isActive ? 'true' : 'false'}
-              onClick={() => toggleLabel(label)}
-              className="rounded-full border border-slate-300 px-4 py-1.5 text-sm font-semibold
-                         data-[active=true]:bg-primary data-[active=true]:text-white"
-            >
-              {label}
-            </button>
-          );
-        })}
-
+  
+      {/* テーマ選択エリア */}
+      <div className="flex flex-col gap-3 pt-2">
+        <p className="text-sm font-bold text-slate-700 dark:text-slate-300">
+          気になるテーマを選択
+        </p>
+  
+        <div className="flex flex-wrap gap-3">
+          {LABELS.map((label) => {
+            const isActive = activeLabels.includes(label);
+            return (
+              <button
+                key={label}
+                type="button"
+                data-active={isActive ? "true" : "false"}
+                onClick={() => toggleLabel(label)}
+                className="
+                  rounded-full border border-slate-300 px-4 py-1.5 text-sm font-semibold
+                  transition-colors
+                  data-[active=true]:bg-primary data-[active=true]:text-white
+                  data-[active=false]:bg-card data-[active=false]:text-slate-700
+                  data-[active=false]:hover:bg-muted data-[active=false]:hover:text-slate-900
+                  hover:border-slate-400
+                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30
+                "
+              >
+                {label}
+              </button>
+            );
+          })}
+        </div>
+  
         <button
-          type="button"
-          onClick={reloadByThemes}
-          disabled={isLoading}
-          className="basis-full mt-2 rounded-xl bg-primary px-5 py-2.5
-                     text-sm font-bold text-white disabled:opacity-60"
-        >
-          選択したテーマに基づき、再読み込みする
-        </button>
-      </div>
+  type="button"
+  onClick={reloadByThemes}
+  disabled={isLoading || !queryText}
+  aria-busy={isLoading}
+  className="
+    mt-2 w-fit rounded-xl bg-primary px-5 py-2.5
+    text-sm font-bold text-white
+    transition-colors
+    hover:bg-primary/90
+    disabled:opacity-60 disabled:hover:bg-primary
+    inline-flex items-center gap-2
+  "
+>
+  {isLoading && (
+    <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+  )}
+  <span>
+    {isLoading ? '再読み込み中…' : '選択したテーマに基づき、再読み込みする'}
+  </span>
+</button>
 
+      </div>
+  
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {examples.map((ex) => (
           <Card
             key={ex.id}
             onClick={() => onExampleSelect(ex)}
-            className="cursor-pointer rounded-3xl overflow-hidden"
+            className="cursor-pointer rounded-3xl overflow-hidden transition-all hover:shadow-lg hover:-translate-y-0.5
+"
           >
             <div className="h-48 relative">
               <Image
@@ -190,4 +220,5 @@ export default function ExamplesSection({ onExampleSelect }: ExamplesSectionProp
       </div>
     </section>
   );
+  
 }
