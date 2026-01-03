@@ -7,6 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -45,7 +46,7 @@ export default function ExampleDialog({ example, onClose, onTryPrompt }: Example
             <div className="flex flex-col gap-8">
               <div className="flex flex-col gap-3">
                 <h4 className="text-sm font-black uppercase tracking-widest text-slate-700 dark:text-slate-400">解説</h4>
-                <p className="text-xl text-slate-900 dark:text-slate-100 leading-loose">{example.description}</p>
+                <DialogDescription className="text-xl text-slate-900 dark:text-slate-100 leading-loose">{example.description}</DialogDescription>
               </div>
 
               <div className="flex flex-col gap-4 bg-muted p-8 rounded-3xl border-2 border-border shadow-inner">

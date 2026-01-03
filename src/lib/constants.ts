@@ -1,4 +1,4 @@
-import { Mail, BookText, BrainCircuit, Search } from 'lucide-react';
+import { Mail, BookText, HelpCircle, Users, Search } from 'lucide-react';
 import type { TaskScenario, BusinessExample } from './types';
 import { PlaceHolderImages } from './placeholder-images';
 
@@ -6,22 +6,22 @@ export const SCENARIOS: TaskScenario[] = [
   {
     label: 'メール作成',
     icon: Mail,
-    description: 'ビジネスメールの下書きを作成します。宛先、目的、含めたい要点を明確に指示することで、より精度の高い文章を生成できます。',
+    description: '課題：取引先へ、会議日程変更を丁寧に依頼するビジネスメールを作成してください。　ヒント：緊急性、件名などを構造化したプロンプトを作成することが重要です。',
   },
   {
     label: '議事録作成',
     icon: BookText,
-    description: '会議の音声やメモから、要点をまとめた議事録を作成します。決定事項、担当者、期限などを構造化して指示することが重要です。',
+    description: '課題：「4/3 ・明日面談。・この後Aさんに連絡。事前に打ち合わせするため」という会議のメモから、整形された議事録を作成してください。　ヒント：決定事項、日時などを構造化したプロンプトを作成することが重要です。',
   },
   {
-    label: 'ブレインストーミング',
-    icon: BrainCircuit,
-    description: '新しいアイデアを複数出してもらいます。テーマ、制約、視点などを与えることで、多様なアイデアを引き出すことができます。',
+    label: '質問リスト作成',
+    icon: HelpCircle,
+    description: '課題：あなたは突然、新しいタスクを割り振られてしまいました。この後、会議で詳細を説明してもらう手筈です。会議中に確認するべきことのリストを生成してください。　ヒント：あなたの状況などを構造化したプロンプトを作成することが重要です。',
   },
   {
-    label: '情報収集',
-    icon: Search,
-    description: '特定のトピックに関する情報を収集・要約します。情報源の指定や、要約の粒度を指示することで、欲しい情報が手に入りやすくなります。',
+    label: 'グループワーク企画作成',
+    icon: Users,
+    description: '課題：あなたの所属チームで行う、グループワークの企画案を作成してください。　ヒント：テーマ、目的、参加者などを構造化したプロンプトを作成することが重要です。',
   },
 ];
 
