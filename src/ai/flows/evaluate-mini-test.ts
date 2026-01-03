@@ -1,21 +1,20 @@
 'use server';
 
 /**
- * @fileOverview This file defines a Genkit flow for evaluating user answers to mini-tests
- * and providing feedback using AI.
+ * @fileOverview このファイルは、ミニテストに対するユーザーの回答を評価し、AIを使用してフィードバックを提供するためのGenkitフローを定義します。
  *
- * - evaluateMiniTest - A function that evaluates the user's answer and provides feedback.
- * - EvaluateMiniTestInput - The input type for the evaluateMiniTest function.
- * - EvaluateMiniTestOutput - The return type for the evaluateMiniTest function.
+ * - evaluateMiniTest - ユーザーの回答を評価し、フィードバックを提供する関数。
+ * - EvaluateMiniTestInput - evaluateMiniTest関数の入力タイプ。
+ * - EvaluateMiniTestOutput - evaluateMiniTest関数の戻り値のタイプ。
  */
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const EvaluateMiniTestInputSchema = z.object({
-  testName: z.string().describe('The name of the mini-test.'),
-  trainingContent: z.string().describe('The relevant training content for the test.'),
-  userAnswer: z.string().describe('The user provided answer to the test.'),
+  testName: z.string().describe('ミニテストの名前。'),
+  trainingContent: z.string().describe('テストに関連するトレーニングコンテンツ。'),
+  userAnswer: z.string().describe('ユーザーが提供したテストの回答。'),
 });
 
 export type EvaluateMiniTestInput = z.infer<typeof EvaluateMiniTestInputSchema>;
@@ -32,13 +31,13 @@ export async function evaluateMiniTest(testName: string, trainingContent: string
 const evaluateMiniTestPrompt = ai.definePrompt({
   name: 'evaluateMiniTestPrompt',
   input: {schema: EvaluateMiniTestInputSchema},
-  prompt: `You are an AI assistant tasked with evaluating user answers to mini-tests based on provided training content.
+  prompt: `あなたは、提供されたトレーニングコンテンツに基づいてミニテストに対するユーザーの回答を評価するAIアシスタントです。
 
-  Test Name: {{{testName}}}
-  Training Content: {{{trainingContent}}}
-  User Answer: {{{userAnswer}}}
+  テスト名: {{{testName}}}
+  トレーニングコンテンツ: {{{trainingContent}}}
+  ユーザーの回答: {{{userAnswer}}}
 
-  Evaluate the user's answer in relation to the training content and provide constructive feedback to help them understand the concepts better. Be specific and concise.
+  トレーニングコンテンツとの関連でユーザーの回答を評価し、概念をよりよく理解するのに役立つ建設的なフィードバックを提供してください。具体的かつ簡潔にしてください。
   `,
 });
 

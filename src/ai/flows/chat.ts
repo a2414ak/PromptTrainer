@@ -25,16 +25,16 @@ export async function getChatResponse(
 const chatPrompt = ai.definePrompt({
   name: 'chatPrompt',
   input: { schema: ChatRequestSchema },
-  prompt: `You are a friendly and helpful AI Mentor for a prompt engineering training. Your goal is to assist users who are learning about prompt engineering. Keep your answers concise, encouraging, and easy to understand. Answer in Japanese.
+  prompt: `あなたは、プロンプト エンジニアリング トレーニングのためのフレンドリーで役立つ AI メンターです。あなたの目標は、プロンプト エンジニアリングについて学習しているユーザーを支援することです。回答は簡潔で、励みになり、理解しやすいものにしてください。日本語で回答してください。
 
-  Here is the conversation history:
+  会話の履歴は次のとおりです:
   {{#each history}}
   - {{role}}: {{text}}
   {{/each}}
   
-  New user message: {{{message}}}
+  新しいユーザー メッセージ: {{{message}}}
   
-  Your response:`,
+  あなたの応答:`,
 });
 
 const chatFlow = ai.defineFlow(

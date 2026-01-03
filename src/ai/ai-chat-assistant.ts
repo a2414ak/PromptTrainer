@@ -1,11 +1,11 @@
 // src/ai/ai-chat-assistant.ts
 'use server';
 /**
- * @fileOverview Implements an AI chat assistant flow for answering user questions about prompt engineering.
+ * @fileOverview プロンプトエンジニアリングに関するユーザーの質問に答えるためのAIチャットアシスタントフローを実装します。
  *
- * - getChatResponse - A function that takes chat messages and a user input, and returns an AI response.
- * - ChatInputType - The input type for the getChatResponse function.
- * - ChatOutputType - The return type for the getChatResponse function.
+ * - getChatResponse - チャットメッセージとユーザー入力を受け取り、AIの応答を返す関数。
+ * - ChatInputType - getChatResponse関数の入力タイプ。
+ * - ChatOutputType - getChatResponse関数の戻り値のタイプ。
  */
 
 import { ai } from '@/ai/genkit';
@@ -19,7 +19,7 @@ const MessageSchema = z.object({
 
 const ChatInputSchema = z.object({
   messages: z.array(MessageSchema),
-  userInput: z.string().describe('The latest user message to respond to.'),
+  userInput: z.string().describe('応答する最新のユーザーメッセージ。'),
 });
 export type ChatInputType = z.infer<typeof ChatInputSchema>;
 
@@ -37,21 +37,21 @@ const chatAssistantPrompt = ai.definePrompt({
   name: 'chatAssistantPrompt',
   input: { schema: ChatInputSchema },
   output: { schema: ChatOutputSchema },
-  prompt: `You are an AI chat assistant specialized in prompt engineering.
-  Your goal is to help users understand prompt engineering concepts and best practices.
-  You should provide guidance, answer questions, and offer suggestions for improving prompts.
-  Maintain a friendly and helpful tone.
+  prompt: `あなたはプロンプトエンジニアリングに特化したAIチャTアシスタントです。
+  あなたの目標は、ユーザーがプロンプトエンジニアリングの概念とベストプラクティスを理解するのを助けることです。
+  あなたはガイダンスを提供し、質問に答え、プロンプトを改善するための提案をすべきです。
+  フレンドリーで親切なトーンを維持してください。
 
-  Here's the current chat history:
+  これが現在のチャット履歴です:
   {{#each messages}}
-    {{#ifEquals role "user"}}User: {{text}}
+    {{#ifEquals role "user"}}ユーザー: {{text}}
     {{else}}AI: {{text}}{{/ifEquals}}
   {{/each}}
 
-  User Input: {{{userInput}}}
+  ユーザー入力: {{{userInput}}}
 
-  AI Response:`,
-  // The safetySettings configuration can be adjusted as needed.
+  AIの応答:`,
+  // safetySettingsの設定は必要に応じて調整できます。
   config: {
     safetySettings: [
       {
