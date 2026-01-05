@@ -113,10 +113,6 @@ export default function Home() {
         onTryPrompt={handleTryPrompt}
       />
 
-{!isExampleOpen && (
-        <FloatingChat isOpen={isChatOpen} onOpenChange={setIsChatOpen} />
-      )}
-
       <Footer />
     </div>
   );
