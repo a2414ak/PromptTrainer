@@ -1,6 +1,7 @@
 import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
+import { FirebaseAnalyticsWrapper } from '@/components/app/firebase-analytics-wrapper';
 
 export const metadata: Metadata = {
   title: 'Prompt Engineering Trainer',
@@ -20,6 +21,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
+        <FirebaseAnalyticsWrapper />
         {children}
         <Toaster />
       </body>
