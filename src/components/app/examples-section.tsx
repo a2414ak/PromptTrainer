@@ -6,6 +6,8 @@ import { BUSINESS_EXAMPLES } from '@/lib/constants';
 import type { BusinessExample } from '@/lib/types';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2 } from "lucide-react";
+import { analytics } from '@/lib/firebase';
+import { logEvent } from 'firebase/analytics';
 
 
 interface ExamplesSectionProps {
@@ -151,7 +153,13 @@ export default function ExamplesSection({ onExampleSelect }: ExamplesSectionProp
                 key={label}
                 type="button"
                 data-active={isActive ? "true" : "false"}
-                onClick={() => toggleLabel(label)}
+                onClick={async () => {
+                  const analyticsInstance = await analytics;
+                  if (analyticsInstance) {
+                    logEvent(analyticsInstance, 'label_button_clicked', { label });
+                  }
+                  toggleLabel(label)
+                }}
                 className="
                   rounded-full border border-slate-300 px-4 py-1.5 text-sm font-semibold
                   transition-colors
@@ -170,7 +178,13 @@ export default function ExamplesSection({ onExampleSelect }: ExamplesSectionProp
   
         <button
   type="button"
-  onClick={reloadByThemes}
+  onClick={async () => {
+    const analyticsInstance = await analytics;
+    if (analyticsInstance) {
+      logEvent(analyticsInstance, 'reload_button_clicked');
+    }
+    reloadByThemes();
+  }}
   disabled={isLoading || !queryText}
   aria-busy={isLoading}
   className="
@@ -196,7 +210,13 @@ export default function ExamplesSection({ onExampleSelect }: ExamplesSectionProp
         {examples.map((ex) => (
           <Card
             key={ex.id}
-            onClick={() => onExampleSelect(ex)}
+            onClick={async () => {
+              const analyticsInstance = await analytics;
+              if (analyticsInstance) {
+                logEvent(analyticsInstance, 'example_card_clicked', { card_id: ex.id });
+              }
+              onExampleSelect(ex)
+            }}
             className="cursor-pointer rounded-3xl overflow-hidden transition-all hover:shadow-lg hover:-translate-y-0.5
 "
           >

@@ -6,6 +6,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Info, Loader2, Sparkles } from "lucide-react";
 import type { ReviewResult, TaskScenarioLabel } from "@/lib/types";
 import ReviewResults from "./review-results";
+import { analytics } from '@/lib/firebase';
+import { logEvent } from 'firebase/analytics';
 
 interface StepTwoSectionProps {
   selectedScenario: TaskScenarioLabel;
@@ -62,7 +64,13 @@ export default function StepTwoSection({
               return (
                 <Button
                   key={s.label}
-                  onClick={() => onScenarioChange(s.label)}
+                  onClick={async () => {
+                    const analyticsInstance = await analytics;
+                    if (analyticsInstance) {
+                      logEvent(analyticsInstance, 'scenario_button_clicked', { scenario: s.label });
+                    }
+                    onScenarioChange(s.label)
+                  }}
                   variant={selectedScenario === s.label ? 'default' : 'outline'}
                   className={`flex items-center gap-3 rounded-2xl border-2 px-8 py-4 transition-all text-lg font-black h-auto ${
                     selectedScenario === s.label
@@ -104,7 +112,13 @@ export default function StepTwoSection({
 
         <div className="flex justify-end">
           <Button
-            onClick={onGenerateAndReview}
+            onClick={async () => {
+              const analyticsInstance = await analytics;
+              if (analyticsInstance) {
+                logEvent(analyticsInstance, 'generate_and_review_button_clicked');
+              }
+              onGenerateAndReview();
+            }}
             disabled={isReviewLoading || !userPrompt.trim()}
             className="group relative disabled:opacity-50 font-black rounded-3xl px-16 py-6 transition-all active:scale-95 shadow-2xl shadow-primary/40 h-auto"
             size="lg"

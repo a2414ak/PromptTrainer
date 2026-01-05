@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Loader2, Sparkles, type LucideIcon } from 'lucide-react';
 import { handleEvaluateMiniTest } from '@/app/actions';
 import { useToast } from "@/hooks/use-toast";
+import { analytics } from '@/lib/firebase';
+import { logEvent } from 'firebase/analytics';
 
 type MiniTestCardProps = {
   id: 'A' | 'B';
@@ -39,6 +41,10 @@ export default function MiniTestCard({
 
   const handleSubmit = async () => {
     if (!inputValue.trim() || isLoading) return;
+    const analyticsInstance = await analytics;
+    if (analyticsInstance) {
+      logEvent(analyticsInstance, 'mini_test_submit_button_clicked', { test_id: id, test_name: testName });
+    }
     setIsLoading(true);
     setFeedback(null);
     try {

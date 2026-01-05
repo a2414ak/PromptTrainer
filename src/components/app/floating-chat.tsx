@@ -9,6 +9,8 @@ import { LifeBuoy, X, Send, Loader2, MessageSquare } from 'lucide-react';
 import { handleChatResponse } from '@/app/actions';
 import { useToast } from "@/hooks/use-toast";
 import type { Message } from '@/lib/types';
+import { analytics } from '@/lib/firebase';
+import { logEvent } from 'firebase/analytics';
 
 interface FloatingChatProps {
   isOpen: boolean;
@@ -36,6 +38,10 @@ export default function FloatingChat({ isOpen, onOpenChange }: FloatingChatProps
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
 
+    const analyticsInstance = await analytics;
+    if (analyticsInstance) {
+      logEvent(analyticsInstance, 'send_chat_message_button_clicked');
+    }
     const userMsg: Message = { role: 'user', text: input, timestamp: new Date() };
     setMessages(prev => [...prev, userMsg]);
     setInput('');
@@ -66,7 +72,14 @@ export default function FloatingChat({ isOpen, onOpenChange }: FloatingChatProps
               <LifeBuoy size={28} />
               AIメンター
             </div>
-            <Button onClick={() => onOpenChange(false)} variant="ghost" size="icon" className="text-primary-foreground hover:bg-black/15 rounded-full p-2">
+            <Button onClick={async () => {
+                const analyticsInstance = await analytics;
+                if (analyticsInstance) {
+                  logEvent(analyticsInstance, 'close_chat_button_clicked');
+                }
+                onOpenChange(false)
+              }}
+              variant="ghost" size="icon" className="text-primary-foreground hover:bg-black/15 rounded-full p-2">
               <X size={28} />
             </Button>
           </CardHeader>
@@ -125,7 +138,13 @@ export default function FloatingChat({ isOpen, onOpenChange }: FloatingChatProps
       )}
 
       <Button
-        onClick={() => onOpenChange(!isOpen)}
+        onClick={async () => {
+          const analyticsInstance = await analytics;
+          if (analyticsInstance) {
+            logEvent(analyticsInstance, 'toggle_chat_button_clicked', { is_open: !isOpen });
+          }
+          onOpenChange(!isOpen)
+        }}
         className={`flex items-center gap-5 px-8 py-6 rounded-full font-black text-dark-text shadow-2xl transition-all active:scale-95 h-auto ${
           isOpen 
             ? 'bg-card text-foreground ring-4 ring-primary/40' 

@@ -14,6 +14,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Terminal, TrendingUp } from "lucide-react";
 import type { BusinessExample } from "@/lib/types";
+import { analytics } from '@/lib/firebase';
+import { logEvent } from 'firebase/analytics';
 
 interface ExampleDialogProps {
   example: BusinessExample | null;
@@ -62,23 +64,33 @@ export default function ExampleDialog({ example, onClose, onTryPrompt }: Example
 
             <DialogFooter className="mt-6 pt-8 border-t-2 border-border flex-col sm:flex-col md:flex-row gap-4">
             <Button
-  disabled={!example.recommendedPrompt}
-  onClick={() => {
-    if (!example.recommendedPrompt) return;
-    onTryPrompt(example.recommendedPrompt);
-  }}
-  className="
-    flex-1 rounded-2xl py-6 text-xl h-auto
-    disabled:opacity-40 disabled:cursor-not-allowed disabled:saturate-0
-  "
-  size="lg"
->
-  このプロンプトを試す
-</Button>
+              disabled={!example.recommendedPrompt}
+              onClick={async () => {
+                if (!example.recommendedPrompt) return;
+                const analyticsInstance = await analytics;
+                if (analyticsInstance) {
+                  logEvent(analyticsInstance, 'try_prompt_button_clicked');
+                }
+                onTryPrompt(example.recommendedPrompt);
+              }}
+              className="
+                flex-1 rounded-2xl py-6 text-xl h-auto
+                disabled:opacity-40 disabled:cursor-not-allowed disabled:saturate-0
+              "
+              size="lg"
+            >
+              このプロンプトを試す
+            </Button>
 
               <Button
                 variant="outline"
-                onClick={onClose}
+                onClick={async () => {
+                  const analyticsInstance = await analytics;
+                  if (analyticsInstance) {
+                    logEvent(analyticsInstance, 'close_example_dialog_button_clicked');
+                  }
+                  onClose();
+                }}
                 className="px-10 border-4 border-input font-black text-sm uppercase tracking-widest rounded-2xl py-6 text-foreground h-auto"
                 size="lg"
               >

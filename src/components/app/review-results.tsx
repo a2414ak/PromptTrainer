@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Bot, FileEdit, MessageSquareQuote } from "lucide-react";
 import type { ReviewResult } from "@/lib/types";
+import { analytics } from '@/lib/firebase';
+import { logEvent } from 'firebase/analytics';
 
 const CRITERIA_ORDER = [
   '指示の明確さ',
@@ -126,7 +128,13 @@ export default function ReviewResults({ reviewResult, onRetry }: ReviewResultsPr
             <div className="p-4 bg-muted border-t-2 border-border text-center">
               <Button
                 variant="link"
-                onClick={onRetry}
+                onClick={async () => {
+                  const analyticsInstance = await analytics;
+                  if (analyticsInstance) {
+                    logEvent(analyticsInstance, 'retry_prompt_button_clicked');
+                  }
+                  onRetry();
+                }}
                 className="text-sm text-primary font-black uppercase tracking-widest hover:brightness-110"
               >
                 <FileEdit className="mr-2 h-4 w-4" />
