@@ -86,7 +86,6 @@ export default function Home() {
           <div className="text-slate-800 dark:text-slate-200 text-xl leading-relaxed">
             <p>ステップ１、ステップ２の課題を解いて、プロンプトエンジニアリングスキルを定着させましょう。</p>
             <p>間違っても大丈夫。生成AIがあなたに合ったフィードバックをします。</p>
-            <p>疑問をAIメンターに相談することもできますよ。右下のボタンから気軽に聞いてくださいね。（チャット履歴は保存されません）</p>
             <p className="font-black text-primary mt-2">（所要時間目安：10分）</p>
           </div>
         </div>
